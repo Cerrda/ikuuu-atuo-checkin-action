@@ -25,7 +25,7 @@ function formatCookie(rawCookieArray) {
 
 // 登录获取 Cookie
 async function logIn(account) {
-  console.log(`${account.name}: 登录中...`)
+  console.log(`🔑 ${account.name}: 登录中...`)
 
   const formData = new FormData()
   formData.append('host', host)
@@ -48,7 +48,7 @@ async function logIn(account) {
   if (responseJson.ret !== 1) {
     throw new Error(`登录失败: ${responseJson.msg}`)
   } else {
-    console.log(`${account.name}: ${responseJson.msg}`)
+    console.log(`✅ ${account.name}: ${responseJson.msg}`)
   }
 
   let rawCookieArray = response.headers.getSetCookie()
@@ -111,8 +111,7 @@ async function main() {
   const allPromises = accounts.map((account) => processSingleAccount(account))
   const results = await Promise.allSettled(allPromises)
 
-  const msgHeader = '\n======== 签到结果 ========\n\n'
-  console.log(msgHeader)
+  console.log('\n======== 签到结果 ========\n')
 
   let hasError = false
 
@@ -125,7 +124,7 @@ async function main() {
       hasError = true
     }
 
-    const icon = isSuccess ? '✅' : '❌'
+    const icon = isSuccess ? '✨' : '❌'
     const message = isSuccess ? result.value : result.reason.message
 
     const line = `${accountName}: ${icon} ${message}`
