@@ -35,12 +35,12 @@ jobs:
 
       - name: Save results
         run: |
-          echo "$(date): ${{ steps.checkin.outputs.result }}" >> checkin-history.txt
+          echo -e "$(date +'%Y-%m-%d %H:%M:%S'): \n${{ steps.checkin.outputs.result }}\n" >> checkin-history.txt
 
       - name: Commit results
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add checkin-history.txt
-          git commit -m "Update checkin history" || exit 0
+          git commit -m "record checkin history" || exit 0
           git push https://${{ github.token }}@github.com/${{ github.repository }}.git
