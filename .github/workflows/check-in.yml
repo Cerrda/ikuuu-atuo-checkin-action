@@ -1,11 +1,11 @@
-name: IKUUU-Auto-Checkin
+name: check-in
 
 on:
   workflow_dispatch:
   schedule:
-    # Actions 任务延迟过高，提前一些时间。
-    # UTC+8 ~ 07:33
-    - cron: '28 7 * * *'
+    # Actions 任务延迟很高。
+    # UTC+8 ~ 16:28
+    - cron: '28 8 * * *'
 
 jobs:
   checkin:
@@ -31,16 +31,14 @@ jobs:
         run: |
           node main.js
 
-      - name: Notify
-        if: ${{ always() && env.TELEGRAM_TOKEN && env.TELEGRAM_TO }}
-        uses: appleboy/telegram-action@master
-        with:
-          to: ${{ secrets.TELEGRAM_TO }}
-          token: ${{ secrets.TELEGRAM_TOKEN }}
-          format: markdown
-          message: |
-            *iKuuu 自动签到*
+      - name: Save results
+        run: |
+          echo "$(date): ${{ steps.checkin.outputs.result }}" >> checkin-history.txt
 
-            ${{ steps.checkin.outputs.result  }}
-
-            [任务详情](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+      - name: Commit results
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add checkin-history.txt
+          git commit -m "Update checkin history" || exit 0
+          git push
