@@ -35,7 +35,7 @@ jobs:
 
       - name: Save results
         run: |
-          echo -e "$(date +'%Y-%m-%d %H:%M:%S'): \n${{ steps.checkin.outputs.result }}\n" >> checkin-history.txt
+          echo -e "$(TZ='Asia/Shanghai' date +'%Y-%m-%d %H:%M:%S'): \n${{ steps.checkin.outputs.result }}\n" >> checkin-history.txt
 
       - name: Commit results
         run: |
